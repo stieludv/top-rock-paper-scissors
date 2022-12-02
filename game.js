@@ -102,9 +102,9 @@ function gameConsole(rounds) {
 ///
 
 // Keep track of result
-let maxRounds = 5;
+let winningScore = 5;
+let computerWins = 0;
 let playerWins = 0;
-let ties = 0;
 let round = 0;
 
 // Display result of played round 
@@ -113,51 +113,58 @@ function displayPlayerMessage(message) {
 }
 
 // Display result of played round 
-function displayPlayerWins(wins) {
-    document.getElementById("wins").textContent = `${wins} wins, round ${round} / ${maxRounds}`;
+function displayRunningScore(playerWins, computerWins, round) {
+    document.getElementById("score").textContent = `${playerWins} vs ${computerWins}`;
+    document.getElementById("round").textContent = `Currently playing round ${round}`;
 }
 
 // Play a round with UI
-function playRoundUI(e) {
+function playGameUI(e) {
     // Play round
     const cc = getComputerChoice();
     const pc = e.target.dataset["choice"];
     const result = playRound(pc, cc);
+
+    // Change score
     if (result === "win") playerWins++;
+    if (result === "lost") computerWins++;
+
+    // Increase round
     round++;
-    displayPlayerMessage(getPlayerMessage(result, pc, cc));
-    displayPlayerWins(playerWins);
+
+    // Display score (round is a part of keeping track of score)
+    displayRunningScore(playerWins, computerWins, round);
+
+    // Did someone win the game yet?
+    if (playerWins === winningScore) {
+        // Display message for won game & reset
+        resetGameUI("You won the game")
+    }
+    else if (computerWins === winningScore) {
+        // Display message for lost game & reset
+        resetGameUI("You lost the game")
+    }
+    else {
+        // Display message for current round
+        displayPlayerMessage(getPlayerMessage(result, pc, cc));
+    }
 }
 
 // Reset game UI
 function resetGameUI(message) {
     // Reset game
     playerWins = 0;
+    computerWins = 0;
     round = 0;
-    displayPlayerMessage(message + ", play again?", "", "");
-    displayPlayerWins("Start by clicking a button");
+    displayPlayerMessage(message + ", play again?");
 }
 
-// Game logic to decide when we win/lose the game, when to play a new round and when to reset the game
-function gameUI(e) {
-    if ((maxRounds - playerWins) < (maxRounds / 2)) {
-        // Player won
-        resetGameUI("You won")
-    }
-    if ((maxRounds - playerWins) > (maxRounds / 2) && round === maxRounds) {
-        // Player lost
-        resetGameUI("You lost")
-    }
-    // Otherwise continue playing the game
-    playRoundUI(e);
-}
-
-// Play game with UI
+// Play game with UI, game is run via click events
 const playerChoiceButtons = document.querySelectorAll(".playerChoiceButton");
 playerChoiceButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
         // Play the game
-        gameUI(e);
+        playGameUI(e);
     })
 })
 
