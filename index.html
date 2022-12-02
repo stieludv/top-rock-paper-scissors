@@ -9,17 +9,19 @@
     <link rel="stylesheet" href="style.css"></link>
 </head>
 <body>
-    <div>
-        <h1 id="result">Rock Paper Scissors</h1>
-        <h3>Score</h3>
-        <h2 id="score">0 vs 0</h2>
-        <h3>Player vs Computer</h3>
-        <p id="round">Press a button to start</p>
-    </div>
-    <div>
-        <button data-choice="rock" class="player-choice-button">Rock</button>
-        <button data-choice="paper" class="player-choice-button">Paper</button>
-        <button data-choice="scissors" class="player-choice-button">Scissors</button>
+    <div class="game-container">
+        <div class="game-score-container">
+            <h1 id="result">Rock Paper Scissors</h1>
+            <h3>Score</h3>
+            <h2 id="score">0 vs 0</h2>
+            <h3>Player vs Computer</h3>
+            <p id="round">Press a button to start</p>
+        </div>
+        <div class="game-button-container">
+            <button data-choice="rock" class="player-choice-button">Rock</button>
+            <button data-choice="paper" class="player-choice-button">Paper</button>
+            <button data-choice="scissors" class="player-choice-button">Scissors</button>
+        </div>
     </div>
     <script src="game.js"></script>
 </body>
