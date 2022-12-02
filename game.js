@@ -1,3 +1,15 @@
+/// 
+/// The console version of the game is no longer functional, this needs amending.
+/// The UI version of the game works without any known bugs.
+/// 
+/// Possible TODO:s
+/// Fix the console version of the game (so UI and Console works).
+/// Replace words like "rock", "paper", etc with emojis and such.
+/// Adding more or/and better animations.
+/// Add game settings? Like changing the score you need to win or setting max rounds?
+/// More statistics, such as win rate (%), games won, etc.
+/// 
+
 ///
 // Game implementation (game logic)
 ///
