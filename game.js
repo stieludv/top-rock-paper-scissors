@@ -1,4 +1,6 @@
-
+///
+// Game implementation (game logic)
+///
 
 // Declared global return values 
 // Array of return values (array of strings)
@@ -14,6 +16,22 @@ function getComputerChoice() {
 }
 
 
+// Display the correct message
+function getPlayerMessage(result, playerSelection, computerSelection) {
+    const sps = sanitizeValue(playerSelection);
+    const scs = sanitizeValue(computerSelection); 
+    if (result === "tie") {
+        return `Tie! ${sps} doesn't beat ${scs}`;
+    }
+    if (result === "win") {
+        return `You win! ${sps} beats ${scs}`;
+    }
+    if (result === "lost") {
+        return `You lose! ${sps} is beaten by ${scs}`;
+    }
+}
+
+
 // Writing a function that plays a single round of the game:
 function playRound(playerSelection, computerSelection) {
     const playerSelectionSanitized = sanitizeValue(playerSelection);
@@ -25,7 +43,7 @@ function playRound(playerSelection, computerSelection) {
     // No need to do any checks if it is a tie:
     if (playerSelectionSanitized === computerSelectionSanitized) {
         // I want to return capitalized words, no matter that the input is.
-        return `Tie! ${playerSelectionSanitized} doesn't beat ${computerSelectionSanitized}`;
+        return "tie"
     } 
     
     // I don't want to create comparisons for every option...
@@ -44,11 +62,11 @@ function playRound(playerSelection, computerSelection) {
     }
 
     if (playerLost) {
-        return `You lose! ${playerSelectionSanitized} is beaten by ${computerSelectionSanitized}`;
+        return "lost"
     }
     else {
         // If the player has not lost, we can return the win statement
-        return `You win! ${playerSelectionSanitized} beats ${computerSelectionSanitized}`;
+        return "win"
     }
 
     // If the player picks paper, the player has lost if the computer picks rock.
@@ -67,7 +85,7 @@ function sanitizeValue(input) {
 
 // Implement the game loop/function
 // This will be our main function that runs the game
-function game(rounds) {
+function gameConsole(rounds) {
     // For the amount of rounds, loop once per round
     for (let i = 0; i < rounds; i++) {
         const input = prompt('Rock, paper or scissors?');
@@ -75,4 +93,72 @@ function game(rounds) {
     }
 }
 
-game(5);
+// gameConsole(5);
+
+
+
+///
+// UI implementation
+///
+
+// Keep track of result
+let maxRounds = 5;
+let playerWins = 0;
+let ties = 0;
+let round = 0;
+
+// Display result of played round 
+function displayPlayerMessage(message) {
+    document.getElementById("result").textContent = message;
+}
+
+// Display result of played round 
+function displayPlayerWins(wins) {
+    document.getElementById("wins").textContent = `${wins} wins, round ${round} / ${maxRounds}`;
+}
+
+// Play a round with UI
+function playRoundUI(e) {
+    // Play round
+    const cc = getComputerChoice();
+    const pc = e.target.dataset["choice"];
+    const result = playRound(pc, cc);
+    if (result === "win") playerWins++;
+    round++;
+    displayPlayerMessage(getPlayerMessage(result, pc, cc));
+    displayPlayerWins(playerWins);
+}
+
+// Reset game UI
+function resetGameUI(message) {
+    // Reset game
+    playerWins = 0;
+    round = 0;
+    displayPlayerMessage(message + ", play again?", "", "");
+    displayPlayerWins("Start by clicking a button");
+}
+
+// Game logic to decide when we win/lose the game, when to play a new round and when to reset the game
+function gameUI(e) {
+    if ((maxRounds - playerWins) < (maxRounds / 2)) {
+        // Player won
+        resetGameUI("You won")
+    }
+    if ((maxRounds - playerWins) > (maxRounds / 2) && round === maxRounds) {
+        // Player lost
+        resetGameUI("You lost")
+    }
+    // Otherwise continue playing the game
+    playRoundUI(e);
+}
+
+// Play game with UI
+const playerChoiceButtons = document.querySelectorAll(".playerChoiceButton");
+playerChoiceButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+        // Play the game
+        gameUI(e);
+    })
+})
+
+
