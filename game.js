@@ -160,7 +160,7 @@ function resetGameUI(message) {
 }
 
 // Play game with UI, game is run via click events
-const playerChoiceButtons = document.querySelectorAll(".playerChoiceButton");
+const playerChoiceButtons = document.querySelectorAll(".player-choice-button");
 playerChoiceButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
         // Play the game
